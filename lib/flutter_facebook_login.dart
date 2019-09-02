@@ -139,6 +139,11 @@ class FacebookLogin {
         FacebookLoginResult._(result.cast<String, dynamic>()));
   }
 
+  Future<int> refreshCurrentAccessToken() async {
+    Map<String, dynamic> result = await channel.invokeMethod("refreshCurrentAccessToken");
+    return result["code"];
+  }
+
   /// Logs the currently logged in user out.
   ///
   /// NOTE: On iOS, this behaves in an unwanted way. As far the Login SDK is

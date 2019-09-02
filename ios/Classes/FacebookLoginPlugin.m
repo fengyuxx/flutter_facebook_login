@@ -73,7 +73,9 @@
   } else if ([@"logOut" isEqualToString:call.method]) {
     [self logOut:result];
   } else if ([@"getCurrentAccessToken" isEqualToString:call.method]) {
-    [self getCurrentAccessToken:result];
+      [self getCurrentAccessToken:result];
+  } else if ([@"refreshCurrentAccessToken" isEqualToString:call.method]) {
+      [self refreshCurrentAccessToken:result];
   } else {
     result(FlutterMethodNotImplemented);
   }
@@ -133,10 +135,20 @@
 }
 
 - (void)getCurrentAccessToken:(FlutterResult)result {
-  FBSDKAccessToken *currentToken = [FBSDKAccessToken currentAccessToken];
-  NSDictionary *mappedToken = [self accessTokenToMap:currentToken];
+    FBSDKAccessToken *currentToken = [FBSDKAccessToken currentAccessToken];
+    NSDictionary *mappedToken = [self accessTokenToMap:currentToken];
+    
+    result(mappedToken);
+}
 
-  result(mappedToken);
+- (void)refreshCurrentAccessToken:(FlutterResult)flutterResult {
+    [FBSDKAccessToken refreshCurrentAccessToken:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+        if(error != nil){
+            flutterResult(@{@"code": @0});
+        }else{
+            flutterResult(@{@"code": @(error.code), @"error": [NSString stringWithFormat:@"%@", error]});
+        }
+    }];
 }
 
 - (void)handleLoginResult:(FBSDKLoginManagerLoginResult *)loginResult

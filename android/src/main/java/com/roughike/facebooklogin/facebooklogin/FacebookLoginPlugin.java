@@ -140,5 +140,24 @@ public class FacebookLoginPlugin implements MethodCallHandler {
 
             result.success(tokenMap);
         }
+
+
+        public void refreshCurrentAccessToken(Result result) {
+            AccessToken.refreshCurrentAccessTokenAsync(new AccessTokenRefreshCallback(){
+                void OnTokenRefreshed(AccessToken accessToken){
+                    Map<String, Object> map=new Map();
+                    map.put("code", 0);
+                    result.success(map);
+                }
+                void OnTokenRefreshFailed(FacebookException exception){
+                    Map<String, Object> map=new Map();
+                    map.put("code", -1);
+                    map.put("error", exception.toString());
+                    result.success(map);
+                }
+
+            });
+
+        }
     }
 }
