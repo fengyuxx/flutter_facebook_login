@@ -140,7 +140,8 @@ class FacebookLogin {
   }
 
   Future<int> refreshCurrentAccessToken() async {
-    Map<String, dynamic> result = await channel.invokeMethod("refreshCurrentAccessToken");
+    Map<dynamic, dynamic> result =
+        await channel.invokeMethod("refreshCurrentAccessToken");
     return result["code"];
   }
 
